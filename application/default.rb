@@ -1,2 +1,2 @@
-depends ['account', 'bluepill']
-
+depends 'account'
+depends 'python'

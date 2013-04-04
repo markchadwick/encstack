@@ -31,17 +31,16 @@ action :add do
     group     user
   end
 
-  bash "init-#{name}-virtualenv" do
-    code    "virtualenv --no-site-packages #{envdir}"
-    user    user
+  python_virtualenv envdir do
+    owner   user
     group   user
-    not_if  { ::File.directory?(envdir) }
+    options '--no-site-packages'
   end
 
   bash "update-#{name}-virtualenv" do
     code    "#{envdir}/bin/pip install -r #{srcdir}/requirements.txt"
-    user        user
-    action      :nothing
+    user    user
+    action  :nothing
   end
 
   git srcdir do
@@ -51,18 +50,5 @@ action :add do
     user        user
     group       group
     notifies    :run, "bash[update-#{name}-virtualenv]"
-  end
-
-  # ---------------------------------------------------------------------------
-  # Bluepill Service
-  # ---------------------------------------------------------------------------
-
-  # serivce name do
-  #   provider  bluepill_serivce
-  #   action    [:enable, :start, :stop]
-  # end
-
-  bluepill_serivce name do
-    action    [:enable, :start, :stop]
   end
 end
