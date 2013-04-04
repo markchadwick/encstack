@@ -1,1 +1,2 @@
-include_recipe 'account::default'
+depends ['account', 'bluepill']
+

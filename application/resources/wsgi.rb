@@ -16,3 +16,4 @@ attribute :port, :kind_of => Integer, :default => 4
 # -----------------------------------------------------------------------------
 
 attribute :repository, :kind_of => String
+attribute :reference,  :kind_of => String, :default => 'master'

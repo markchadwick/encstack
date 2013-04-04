@@ -1,1 +1,1 @@
-include_recipe 'application'
+depends 'application'
