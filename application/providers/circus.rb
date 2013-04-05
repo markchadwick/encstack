@@ -6,6 +6,7 @@ action :add do
   homedir = "#{approot}/#{user}"
   srcdir  = "#{homedir}/src"
   envdir  = "#{homedir}/environment"
+  conf    = "#{homedir}/#{name}.ini"
 
   # ---------------------------------------------------------------------------
   # Applications setup
@@ -50,5 +51,29 @@ action :add do
     user        user
     group       group
     notifies    :run, "bash[update-#{name}-virtualenv]"
+  end
+
+  template conf do
+    source    'application.ini.erb'
+    cookbook  'application'
+    notifies  :restart, 'service[circusd]'
+    owner     user
+    group     user
+    mode      0660
+
+    variables({
+      :name     => name,
+      :srcdir   => srcdir,
+      :envdir   => envdir,
+      :user     => user,
+      :app      => new_resource.app,
+      :host     => new_resource.host,
+      :port     => new_resource.port,
+      :workers  => new_resource.workers
+    })
+  end
+
+  link "/etc/circus/config.d/#{name}.ini" do
+    to conf
   end
 end

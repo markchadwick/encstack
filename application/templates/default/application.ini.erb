@@ -1,0 +1,14 @@
+[watcher:<%= @name %>]
+working_dir   = <%= @srcdir %>
+use_sockets   = True
+numprocesses  = <%= @workers %>
+cmd           = <%= @envdir %>/bin/chaussette --fd $(circus.sockets.<%= @name %>) <%= @app %>
+uid           = <%= @user %>
+gid           = <%= @user %>
+
+[env:<%= @name %>]
+PYTHONPATH    = <%= @srcdir %>
+
+[socket:<%= @name %>]
+host = <%= @host %>
+port = <%= @port %>
